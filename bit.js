@@ -21,6 +21,9 @@ const init = function(config) {
   sock.on("message", async function(topic, message) {
     let type = topic.toString()
     let o = message.toString()
+    if (config.verbose) {
+      console.log(message);
+    }
     switch (type) {
       case "mempool":
       case "mempool-slp-genesis":
