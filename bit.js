@@ -11,12 +11,21 @@ const init = function(config) {
   let connections = config.connections
   sock.connect("tcp://" + host + ":" + port)
   sock.subscribe("mempool")
+  sock.subscribe("mempool-slp-genesis")
+  sock.subscribe("mempool-slp-send")
+  sock.subscribe("mempool-slp-mint")
   sock.subscribe("block")
+  sock.subscribe("block-slp-genesis")
+  sock.subscribe("block-slp-send")
+  sock.subscribe("block-slp-mint")
   sock.on("message", async function(topic, message) {
     let type = topic.toString()
     let o = message.toString()
     switch (type) {
-      case "mempool": {
+      case "mempool":
+      case "mempool-slp-genesis":
+      case "mempool-slp-send":
+      case "mempool-slp-mint": {
         let tx = JSON.parse(o)
         Object.keys(connections.pool).forEach(async function(key) {
           let connection = connections.pool[key]
@@ -36,13 +45,16 @@ const init = function(config) {
               } catch (e) {
                 console.log("Error", e)
               }
-              connection.res.sseSend({ type: "mempool", data: result })
+              connection.res.sseSend({ type: type, data: result })
             }
           }
         })
         break
       }
-      case "block": {
+      case "block":
+      case "block-slp-genesis":
+      case "block-slp-send":
+      case "block-slp-mint": {
         let block = JSON.parse(o)
         Object.keys(connections.pool).forEach(async function(key) {
           let connection = connections.pool[key]
@@ -70,7 +82,7 @@ const init = function(config) {
               }
             }
             connection.res.sseSend({
-              type: "block", index: block.i, data: transformed 
+              type: type, index: block.i, data: transformed 
             })
           }
         })
