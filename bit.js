@@ -37,10 +37,7 @@ const init = function(config) {
       }
     }
     switch (type) {
-      case "mempool":
-      case "mempool-slp-genesis":
-      case "mempool-slp-send":
-      case "mempool-slp-mint": {
+      case "mempool": {
         let tx = JSON.parse(o)
         console.log(tx)
         Object.keys(connections.pool).forEach(async function(key) {
@@ -68,10 +65,7 @@ const init = function(config) {
         })
         break
       }
-      case "block":
-      case "block-slp-genesis":
-      case "block-slp-send":
-      case "block-slp-mint": {
+      case "block": {
         let block = JSON.parse(o)
         console.log(block)
         Object.keys(connections.pool).forEach(async function(key) {
@@ -81,7 +75,7 @@ const init = function(config) {
           const types = encoded.q.db
           if (!types || types.indexOf("c") >= 0) {
             let filter = new mingo.Query(encoded.q.find)
-            let filtered = block.txs.filter(function(tx) {
+            let filtered = block.txns.filter(function(tx) {
               return filter.test(tx)
             })
             let transformed = []
