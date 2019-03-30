@@ -30,6 +30,7 @@ const init = function(config) {
       case "mempool-slp-send":
       case "mempool-slp-mint": {
         let tx = JSON.parse(o)
+        console.log(tx)
         Object.keys(connections.pool).forEach(async function(key) {
           let connection = connections.pool[key]
           const encoded = bcode.encode(connection.query)
@@ -59,9 +60,11 @@ const init = function(config) {
       case "block-slp-send":
       case "block-slp-mint": {
         let block = JSON.parse(o)
+        console.log(block)
         Object.keys(connections.pool).forEach(async function(key) {
           let connection = connections.pool[key]
           const encoded = bcode.encode(connection.query)
+          console.log(encoded)
           const types = encoded.q.db
           if (!types || types.indexOf("c") >= 0) {
             let filter = new mingo.Query(encoded.q.find)

@@ -1,6 +1,6 @@
 {
   "name": "fountainhead-slpsocketd",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The message bus for SLP",
   "main": "index.js",
   "scripts": {
