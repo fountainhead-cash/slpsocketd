@@ -95,15 +95,15 @@ const init = function(config) {
       console.log("#")
       console.log("######################################################################################")
     })
-
-    // set up heartbeat
-    setInterval(function() {
-      console.log('## Sending heartbeat to ' + Object.keys(connections.pool).length);
-      Object.keys(connections.pool).forEach(async function(key) {
-        let connection = connections.pool[key]
-        connection.res.sseHeartbeat()
-      });
-    }, (config.heartbeat ? config.heartbeat : 10) * 1000); // every N seconds
   }
+
+  // set up heartbeat
+  setInterval(function() {
+    console.log('## Sending heartbeat to ' + Object.keys(connections.pool).length);
+    Object.keys(connections.pool).forEach(async function(key) {
+      let connection = connections.pool[key]
+      connection.res.sseHeartbeat()
+    });
+  }, (config.heartbeat ? config.heartbeat : 10) * 1000); // every N seconds
 }
 module.exports = { init: init }
