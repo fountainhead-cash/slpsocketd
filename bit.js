@@ -3,6 +3,7 @@ const zmq = require("zeromq")
 const mingo = require("mingo")
 const bcode = require("fountainhead-bcode")
 const jq = require("fountainhead-bigjq")
+const BigNumber = require('bignumber.js')
 const defaults = { host: "127.0.0.1", port: 28339 }
 const init = function(config) {
   let sock = zmq.socket("sub")
@@ -24,6 +25,17 @@ const init = function(config) {
     if (config.verbose) {
       console.log(message);
     }
+    // TODO change this to be more efficient when schema finalized
+    function convert_numberdecimal_to_string(o) {
+      for (const i in o) {
+        if (o[i] !== null && typeof(o[i]) === "object") {
+          if (o[i].hasOwnProperty('$numberDecimal')) {
+            o[i] = new BigNumber(o[i]['$numberDecimal'].toString()).toFixed()
+          }
+          convert_numberdecimal_to_string(o[i])
+        }
+      }
+    }
     switch (type) {
       case "mempool":
       case "mempool-slp-genesis":
@@ -39,6 +51,7 @@ const init = function(config) {
             let filter = new mingo.Query(encoded.q.find)
             if (filter.test(tx)) {
               let decoded = bcode.decode(tx)
+			  convert_numberdecimal_to_string(decoded)
               let result
               try {
                 if (encoded.r && encoded.r.f) {
@@ -75,6 +88,7 @@ const init = function(config) {
             for(let i=0; i<filtered.length; i++) {
               let tx = filtered[i]
               let decoded = bcode.decode(tx)
+			  convert_numberdecimal_to_string(decoded)
               let result
               try {
                 if (encoded.r && encoded.r.f) {
