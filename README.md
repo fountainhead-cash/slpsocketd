@@ -1,28 +1,28 @@
-# bitsocketd
+# slpsocketd
 
-message bus for bitcoin
+message bus for SLP
 
 # Prerequisites
 
-bitsocketd has a dependency on bitdb.
+slpsocketd has a dependency on SLPDB.
 
-[Install bitd](https://docs.fountainhead.cash/docs/install)
+[Install SLPDB](https://github.com/simpleledger/SLPDB)
 
 # Install
 
 ```
-npm install --save fountainhead-bitsocketd
+npm install --save fountainhead-slpsocketd
 ```
 
 # Usage
 
 ## 1. Basic
 
-If you already have BitDB running on port 28339, you can simply do this:
+If you already have SLPDB running on port 28339, you can simply do this:
 
 ```
-git clone https://github.com/fountainhead-cash/bitsocket
-cd bitsocket
+git clone https://github.com/fountainhead-cash/slpsockserve
+cd slpsockserve
 npm install
 cp .env.example .env
 $(EDITOR) .env
@@ -37,20 +37,20 @@ Now open your browser to the socket URL and you'll see SSE pouring in.
 
 ![browser](img/raw.gif)
 
-That's the raw firehose. You probably don't want to consume the whole thing, so make sure to add a bitquery filter. Learn more at [https://bitsocket.org/docs](https://bitsocket.org/docs)
+That's the raw firehose. You probably don't want to consume the whole thing, so make sure to add a bitquery filter. Learn more at [https://docs.fountainhead.cash](https://docs.fountainhead.cash)
 
-## 2. Custom BitDB node
+## 2. Custom SLPDB node
 
-You can specify the Zeromq subscriber from a bitdb node, like this:
+You can specify the Zeromq subscriber from a SLPDB node, like this:
 
 ```
-const bitsocketd = require('fountainhead-bitsocketd')
-bitsocketd.init({
+const slpsocketd = require('fountainhead-slpsocketd')
+slpsocketd.init({
   bit: { host: "127.0.0.1", port: 28339 },
 })
 ```
 
-By default Bitdb's zeromq publisher broadcasts to [port 28339](https://github.com/21centurymotorcompany/bitd/blob/master/config.js#L44), but you can customize if you want.
+By default SLPDB's zeromq publisher broadcasts to [port 28339](https://github.com/simpleledger/SLPDB/blob/master/config.ts), but you can customize if you want.
 
 
 ## 3. Custom SSE port
@@ -58,8 +58,8 @@ By default Bitdb's zeromq publisher broadcasts to [port 28339](https://github.co
 By default, the SSE port is automatically 3001. You can customize this:
 
 ```
-const bitsocketd = require('fountainhead-bitsocketd')
-bitsocketd.init({
+const slpsocketd = require('fountainhead-slpsocketd')
+slpsocketd.init({
   socket: { port: 3001 }
 })
 ```
@@ -75,8 +75,8 @@ app.listen(3000 , function () {
 })
 
 // Step 2. pass the express server to bitsocketd
-const bitsocketd = require('fountainhead-bitsocketd')
-bitsocketd.init({
+const slpsocketd = require('fountainhead-slpsocketd')
+slpsocketd.init({
   socket: { app: app }
 })
 ```
